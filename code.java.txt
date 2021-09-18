@@ -1,0 +1,97 @@
+package fasfsdf;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.ObjectInputStream.GetField;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class javamian {
+	
+	public static LinkedHashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
+    {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Integer> > list =
+               new LinkedList<Map.Entry<String, Integer> >(hm.entrySet());
+ 
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+         
+        // put data from sorted list to hashmap
+        LinkedHashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
+    }
+	
+	public static Object getElementByIndex(LinkedHashMap map,int index){
+	    return map.get( (map.keySet().toArray())[ index ] );
+	}
+	
+	public static void main(String[] args) throws Exception {
+		File file = new File("C:\\Users\\Pawan Nagar\\Downloads\\coding-assignment-Sep-2020-master\\coding-assignment-Sep-2020-master\\2020-Freshers\\goodie-dilemma\\sample_input.txt");
+		  
+		  BufferedReader br = new BufferedReader(new FileReader(file));
+		  int count=0;
+		  String st;
+		  int m=0;
+		  HashMap<String, Integer> goodies = new HashMap<String, Integer>();
+
+		  while ((st = br.readLine()) != null) {
+			  int sepPos = st.indexOf(':');
+			  if(count==0) {
+				  m = Integer.parseInt(st.substring(sepPos+2)) ;	
+			  }
+			  if(count>=4) {
+				  String s = st.substring(0, sepPos+1);
+				  int t = Integer.parseInt(st.substring(sepPos+2));
+				  goodies.put(s, t);
+			  }
+			  count++;
+		  }
+		  
+
+		LinkedHashMap<String, Integer> sortedGoodies = sortByValue(goodies);
+		  int minimun = (int) getElementByIndex(sortedGoodies, sortedGoodies.size()-1);
+		  int first = 0;
+		  
+		  for(int i=0; i<=goodies.size()-m; i++) {
+			  int temp = (int) getElementByIndex(sortedGoodies, i+m-1) - (int) getElementByIndex(sortedGoodies, i);
+			  if(temp<minimun) {
+				  minimun = temp;
+				  first = i;
+			  }
+		  }
+		  
+		  
+		  FileWriter myWriter = new FileWriter("C:\\Users\\Pawan Nagar\\Desktop\\sample_output.txt");
+		  myWriter.write("The goodies selected for distribution are:");
+		  myWriter.write("\r\n");
+		  myWriter.write("\r\n");
+		  for(int i=first;i<first+m;i++) {
+			  String s = (String) sortedGoodies.keySet().toArray()[i];
+			  int t = (int) getElementByIndex(sortedGoodies, i);
+			  myWriter.write(s+": "+t);
+			  myWriter.write("\r\n");
+		  }
+		  myWriter.write("\r\n");
+		  myWriter.write("And the difference between the chosen goodie with highest price and the lowest price is "+minimun);
+		  myWriter.close();
+		  }
+	
+	}
+

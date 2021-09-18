@@ -1,0 +1,9 @@
+Instrcuctions:
+
+1. Open the code and replace the input file path(line no 46) with your input file path.
+
+2. Replace the output file path with your output file path.
+
+3. Run the code and see you results in output file.
+
+Note: Code is written in java 1.8
